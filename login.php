@@ -4,19 +4,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   include 'connect.php';
   $username = $_POST['username'];
   $password = $_POST['password'];
-
-  $sql = "SELECT * FROM `registration` WHERE `username`='$username' AND `password`='$password'";
+  $sql = "SELECT * FROM `registration` WHERE `username`='$username'";
   $result = mysqli_query($con, $sql);
   if ($result) {
     $num = mysqli_num_rows($result);
+    $hashedPasswordFromDatabase = mysqli_fetch_assoc($result)['password'];
+
     if ($num > 0) {
-      // echo 'login successfully';
-      session_start();
-      $_SESSION['loggedin'] = true;
-      $_SESSION['username'] = $username;
-      header('location: home.php');
-    } else {
-      echo 'invalid username or password';
+      if (password_verify($password, $hashedPasswordFromDatabase)) {
+        session_start();
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $username;
+        header('location: home.php');
+      } else {
+        echo 'invalid username or password';
+      }
     }
   }
 }
