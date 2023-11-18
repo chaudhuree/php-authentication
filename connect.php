@@ -7,8 +7,12 @@ $DATABASE = "signupforms";
 
 $con = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
 
-if ($con) {
-  echo "Connection Successful";
-} else {
+// if ($con) {
+//   echo "Connection Successful";
+// } else {
+//   die("Connection failed: " . mysqli_connect_error());
+// }
+
+if (!$con) {
   die("Connection failed: " . mysqli_connect_error());
 }

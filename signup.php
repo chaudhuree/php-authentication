@@ -1,3 +1,31 @@
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+  include 'connect.php';
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+
+  $sql = "SELECT * FROM `registration` WHERE `username`='$username'";
+  $result = mysqli_query($con, $sql);
+  if ($result) {
+    $num = mysqli_num_rows($result);
+    if ($num > 0) {
+      echo 'Username already taken';
+    } else {
+      $sql = "INSERT INTO `registration` (`username`, `password`) VALUES ('$username', '$password')";
+      $result = mysqli_query($con, $sql);
+      if ($result) {
+        echo 'Sign up successfully';
+      } else {
+        die('Data not inserted' . mysqli_error($con));
+      }
+    }
+  }
+}
+
+?>
+
+
 <!doctype html>
 <html lang="en">
 
