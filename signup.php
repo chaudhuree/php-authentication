@@ -1,5 +1,6 @@
 <?php
-
+$success = 0;
+$user = 0;
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
   include 'connect.php';
   $username = $_POST['username'];
@@ -10,12 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   if ($result) {
     $num = mysqli_num_rows($result);
     if ($num > 0) {
-      echo 'Username already taken';
+      // echo 'Username already taken';
+      $user = 1;
     } else {
       $sql = "INSERT INTO `registration` (`username`, `password`) VALUES ('$username', '$password')";
       $result = mysqli_query($con, $sql);
       if ($result) {
-        echo 'Sign up successfully';
+        // echo 'Sign up successfully';
+        $success = 1;
       } else {
         die('Data not inserted' . mysqli_error($con));
       }
@@ -38,6 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </head>
 
 <body>
+  <!-- alert message -->
+  <?php
+  if ($success) {
+    echo '<div class="alert alert-success" role="alert">
+    User has been created successfully
+  </div>';
+  }
+  if ($user) {
+    echo '<div class="alert alert-danger" role="alert">
+    User with the same name already exists!
+  </div>';
+  }
+  ?>
   <h1 class="text-center mt-2">Sign Up Form</h1>
   <div class="container mt-3">
     <form action="signup.php" method="post">
